@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import {
   Card,
   CardContent,
@@ -17,27 +20,95 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { mockAuth } from "@/lib/auth";
 import { User, Mail, Phone, MapPin, Calendar, CheckCircle2 } from "lucide-react";
 
+const profileSchema = yup.object().shape({
+  name: yup
+    .string()
+    .min(3, "Name must be at least 3 characters")
+    .required("Name is required"),
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  phone: yup
+    .string()
+    .matches(
+      /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,9}$/,
+      "Invalid phone number"
+    )
+    .optional(),
+  location: yup.string().optional(),
+});
+
+const securitySchema = yup.object().shape({
+  currentPassword: yup.string().required("Current password is required"),
+  newPassword: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("New password is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("newPassword")], "Passwords must match")
+    .required("Please confirm your password"),
+});
+
+interface ProfileFormData {
+  name: string;
+  email: string;
+  phone?: string;
+  location?: string;
+}
+
+interface SecurityFormData {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 export default function ProfilePage() {
-  const [user, setUser] = useState<any>(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [location, setLocation] = useState("");
+  const [user, setUser] = useState<{ name: string; email: string } | null>(
+    null
+  );
   const [showSuccess, setShowSuccess] = useState(false);
+
+  const {
+    register: registerProfile,
+    handleSubmit: handleProfileSubmit,
+    setValue,
+    formState: { errors: profileErrors, isSubmitting: isProfileSubmitting },
+  } = useForm<ProfileFormData>({
+    resolver: yupResolver(profileSchema) as any,
+  });
+
+  const {
+    register: registerSecurity,
+    handleSubmit: handleSecuritySubmit,
+    reset: resetSecurity,
+    formState: { errors: securityErrors, isSubmitting: isSecuritySubmitting },
+  } = useForm<SecurityFormData>({
+    resolver: yupResolver(securitySchema) as any,
+  });
 
   useEffect(() => {
     const userData = mockAuth.getUser();
     if (userData) {
       setUser(userData);
-      setName(userData.name);
-      setEmail(userData.email);
+      setValue("name", userData.name);
+      setValue("email", userData.email);
     }
-  }, []);
+  }, [setValue]);
 
-  const handleSave = () => {
-    const updatedUser = { ...user, name, email };
+  const onProfileSubmit = async (data: ProfileFormData) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    const updatedUser = { ...user, name: data.name, email: data.email };
     localStorage.setItem("user", JSON.stringify(updatedUser));
     setUser(updatedUser);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+  };
+
+  const onSecuritySubmit = async (_data: SecurityFormData) => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    resetSecurity();
     setShowSuccess(true);
     setTimeout(() => setShowSuccess(false), 3000);
   };
@@ -102,89 +173,135 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent>
               <TabsContent value="general" className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="pl-10"
-                    />
+                <form
+                  onSubmit={handleProfileSubmit(onProfileSubmit)}
+                  className="space-y-4"
+                >
+                  <div className="space-y-2">
+                    <Label htmlFor="name">Full Name</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="name"
+                        {...registerProfile("name")}
+                        className="pl-10"
+                      />
+                    </div>
+                    {profileErrors.name && (
+                      <p className="text-sm text-destructive">
+                        {profileErrors.name.message}
+                      </p>
+                    )}
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email Address</Label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="pl-10"
-                    />
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="email"
+                        type="email"
+                        {...registerProfile("email")}
+                        className="pl-10"
+                      />
+                    </div>
+                    {profileErrors.email && (
+                      <p className="text-sm text-destructive">
+                        {profileErrors.email.message}
+                      </p>
+                    )}
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="+1 (555) 000-0000"
-                      className="pl-10"
-                    />
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="phone"
+                        type="tel"
+                        {...registerProfile("phone")}
+                        placeholder="+1 (555) 000-0000"
+                        className="pl-10"
+                      />
+                    </div>
+                    {profileErrors.phone && (
+                      <p className="text-sm text-destructive">
+                        {profileErrors.phone.message}
+                      </p>
+                    )}
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="location"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      placeholder="San Francisco, CA"
-                      className="pl-10"
-                    />
+                  <div className="space-y-2">
+                    <Label htmlFor="location">Location</Label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="location"
+                        {...registerProfile("location")}
+                        placeholder="San Francisco, CA"
+                        className="pl-10"
+                      />
+                    </div>
+                    {profileErrors.location && (
+                      <p className="text-sm text-destructive">
+                        {profileErrors.location.message}
+                      </p>
+                    )}
                   </div>
-                </div>
-                <Button onClick={handleSave} className="w-full">
-                  Save Changes
-                </Button>
+                  <Button type="submit" className="w-full" disabled={isProfileSubmitting}>
+                    {isProfileSubmitting ? "Saving..." : "Save Changes"}
+                  </Button>
+                </form>
               </TabsContent>
 
               <TabsContent value="security" className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="current-password">Current Password</Label>
-                  <Input
-                    id="current-password"
-                    type="password"
-                    placeholder="Enter current password"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="new-password">New Password</Label>
-                  <Input
-                    id="new-password"
-                    type="password"
-                    placeholder="Enter new password"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm Password</Label>
-                  <Input
-                    id="confirm-password"
-                    type="password"
-                    placeholder="Confirm new password"
-                  />
-                </div>
-                <Button className="w-full">Update Password</Button>
+                <form
+                  onSubmit={handleSecuritySubmit(onSecuritySubmit)}
+                  className="space-y-4"
+                >
+                  <div className="space-y-2">
+                    <Label htmlFor="current-password">Current Password</Label>
+                    <Input
+                      id="current-password"
+                      type="password"
+                      placeholder="Enter current password"
+                      {...registerSecurity("currentPassword")}
+                    />
+                    {securityErrors.currentPassword && (
+                      <p className="text-sm text-destructive">
+                        {securityErrors.currentPassword.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-password">New Password</Label>
+                    <Input
+                      id="new-password"
+                      type="password"
+                      placeholder="Enter new password"
+                      {...registerSecurity("newPassword")}
+                    />
+                    {securityErrors.newPassword && (
+                      <p className="text-sm text-destructive">
+                        {securityErrors.newPassword.message}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                    <Input
+                      id="confirm-password"
+                      type="password"
+                      placeholder="Confirm new password"
+                      {...registerSecurity("confirmPassword")}
+                    />
+                    {securityErrors.confirmPassword && (
+                      <p className="text-sm text-destructive">
+                        {securityErrors.confirmPassword.message}
+                      </p>
+                    )}
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isSecuritySubmitting}>
+                    {isSecuritySubmitting ? "Updating..." : "Update Password"}
+                  </Button>
+                </form>
               </TabsContent>
 
               <TabsContent value="activity" className="space-y-4">

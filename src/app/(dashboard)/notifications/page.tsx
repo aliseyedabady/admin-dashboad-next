@@ -25,7 +25,7 @@ interface Notification {
   message: string;
   time: string;
   read: boolean;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 export default function NotificationsPage() {
