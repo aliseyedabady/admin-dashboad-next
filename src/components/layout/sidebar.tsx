@@ -10,44 +10,65 @@ import {
   BarChart3,
   Settings,
   ChevronLeft,
+  UserCircle,
+  TrendingUp,
+  Bell,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/language-context";
 
 interface SidebarProps {
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
 }
 
-const navigation = [
-  {
-    name: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Users",
-    href: "/users",
-    icon: Users,
-  },
-  {
-    name: "Orders",
-    href: "/orders",
-    icon: ShoppingCart,
-  },
-  {
-    name: "Reports",
-    href: "/reports",
-    icon: BarChart3,
-  },
-  {
-    name: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
-];
 
 export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
   const pathname = usePathname();
+  const { t, dir } = useLanguage();
+
+  const navigation = [
+    {
+      name: t.nav.dashboard,
+      href: "/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      name: t.nav.analytics,
+      href: "/analytics",
+      icon: TrendingUp,
+    },
+    {
+      name: t.nav.users,
+      href: "/users",
+      icon: Users,
+    },
+    {
+      name: t.nav.orders,
+      href: "/orders",
+      icon: ShoppingCart,
+    },
+    {
+      name: t.nav.reports,
+      href: "/reports",
+      icon: BarChart3,
+    },
+    {
+      name: t.nav.notifications,
+      href: "/notifications",
+      icon: Bell,
+    },
+    {
+      name: t.nav.profile,
+      href: "/profile",
+      icon: UserCircle,
+    },
+    {
+      name: t.nav.settings,
+      href: "/settings",
+      icon: Settings,
+    },
+  ];
 
   return (
     <div
@@ -63,7 +84,9 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
             <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
               <LayoutDashboard className="text-primary-foreground h-5 w-5" />
             </div>
-            <span className="text-lg font-bold">Admin</span>
+            <span className="text-lg font-bold">
+              {dir === "rtl" ? "پنل مدیریت" : "Admin"}
+            </span>
           </Link>
         )}
         {isCollapsed && (
@@ -109,7 +132,9 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
           <ChevronLeft
             className={cn(
               "h-5 w-5 transition-transform",
-              isCollapsed && "rotate-180"
+              isCollapsed && "rotate-180",
+              dir === "rtl" && !isCollapsed && "rotate-180",
+              dir === "rtl" && isCollapsed && "rotate-0"
             )}
           />
         </Button>

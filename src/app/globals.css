@@ -56,4 +56,29 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* RTL Support */
+  [dir="rtl"] {
+    font-family: var(--font-vazirmatn), sans-serif;
+  }
+
+  [dir="ltr"] {
+    font-family: var(--font-inter), sans-serif;
+  }
+
+  /* RTL Adjustments */
+  [dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-right: 0.5rem;
+    margin-left: 0;
+  }
+
+  [dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]) {
+    margin-right: 0.75rem;
+    margin-left: 0;
+  }
+
+  [dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-right: 1rem;
+    margin-left: 0;
+  }
 }

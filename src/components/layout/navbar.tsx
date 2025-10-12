@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Moon, Sun, User, LogOut, Menu } from "lucide-react";
+import { Search, Moon, Sun, User, LogOut, Menu, Bell, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useTheme } from "@/hooks/use-theme";
+import { useLanguage } from "@/contexts/language-context";
 import { mockAuth } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ interface NavbarProps {
 
 export function Navbar({ onMenuClick }: NavbarProps) {
   const { theme, setTheme } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
   const router = useRouter();
   const [user, setUser] = useState<{ name: string; email: string } | null>(
     null
@@ -66,7 +68,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
             <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
             <Input
               type="search"
-              placeholder="Search..."
+              placeholder={t.nav.search}
               className="w-full pl-10"
             />
           </div>
@@ -74,6 +76,32 @@ export function Navbar({ onMenuClick }: NavbarProps) {
 
         {/* Right section */}
         <div className="flex items-center gap-2">
+          {/* Notifications */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => router.push("/notifications")}
+            className="relative"
+          >
+            <Bell className="h-5 w-5" />
+            <span className="absolute right-2 top-2 flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500"></span>
+            </span>
+            <span className="sr-only">Notifications</span>
+          </Button>
+
+          {/* Language toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setLanguage(language === "fa" ? "en" : "fa")}
+            title={t.common.language}
+          >
+            <Languages className="h-5 w-5" />
+            <span className="sr-only">{t.common.language}</span>
+          </Button>
+
           {/* Theme toggle */}
           <Button
             variant="ghost"
@@ -111,14 +139,14 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push("/settings")}>
+              <DropdownMenuItem onClick={() => router.push("/profile")}>
                 <User className="mr-2 h-4 w-4" />
-                Profile
+                {t.nav.profile}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
-                Log out
+                {t.nav.logout}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
