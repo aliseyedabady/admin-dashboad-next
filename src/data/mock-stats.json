@@ -1,0 +1,18 @@
+{
+  "sales": {
+    "value": 12543,
+    "change": 12.5
+  },
+  "users": {
+    "value": 2847,
+    "change": 8.2
+  },
+  "orders": {
+    "value": 1524,
+    "change": -3.1
+  },
+  "revenue": {
+    "value": 89420,
+    "change": 15.3
+  }
+}

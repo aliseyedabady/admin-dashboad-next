@@ -1,0 +1,42 @@
+[
+  {
+    "id": "ORD-001",
+    "customer": "John Doe",
+    "product": "Premium Subscription",
+    "amount": 99.99,
+    "status": "completed",
+    "date": "2024-03-20"
+  },
+  {
+    "id": "ORD-002",
+    "customer": "Jane Smith",
+    "product": "Basic Plan",
+    "amount": 29.99,
+    "status": "pending",
+    "date": "2024-03-21"
+  },
+  {
+    "id": "ORD-003",
+    "customer": "Bob Johnson",
+    "product": "Enterprise Package",
+    "amount": 299.99,
+    "status": "completed",
+    "date": "2024-03-19"
+  },
+  {
+    "id": "ORD-004",
+    "customer": "Alice Williams",
+    "product": "Standard Plan",
+    "amount": 49.99,
+    "status": "cancelled",
+    "date": "2024-03-18"
+  },
+  {
+    "id": "ORD-005",
+    "customer": "Charlie Brown",
+    "product": "Premium Subscription",
+    "amount": 99.99,
+    "status": "completed",
+    "date": "2024-03-22"
+  }
+]
