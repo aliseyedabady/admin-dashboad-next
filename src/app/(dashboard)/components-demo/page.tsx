@@ -62,7 +62,7 @@ import { CodeBlock } from "@/components/ui/code-block";
 import { cn } from "@/lib/utils";
 
 export default function ComponentsDemoPage() {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   const [switchValue, setSwitchValue] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -97,7 +97,7 @@ export default function ComponentsDemoPage() {
         {/* Preview */}
         <div>
           <p className="mb-2 text-sm font-medium text-muted-foreground">
-            {language === "fa" ? "پیش‌نمایش:" : "Preview:"}
+            {t.components.preview}
           </p>
           <div className="rounded-lg border bg-muted/50 p-6">{children}</div>
         </div>
@@ -113,7 +113,7 @@ export default function ComponentsDemoPage() {
             >
               <span className="flex items-center gap-2">
                 <Code className="h-4 w-4" />
-                {language === "fa" ? "نمایش کد" : "Show Code"}
+                {t.components.showCode}
               </span>
               <ChevronDown
                 className={cn(
@@ -134,24 +134,18 @@ export default function ComponentsDemoPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
-          {language === "fa" ? "نمایش کامپوننت‌ها" : "Components Showcase"}
+          {t.components.title}
         </h1>
         <p className="text-muted-foreground">
-          {language === "fa"
-            ? "تمام کامپوننت‌های UI با مثال‌های کاربردی"
-            : "All UI components with usage examples"}
+          {t.components.subtitle}
         </p>
       </div>
 
       {/* Buttons */}
       <ComponentSection
         id="buttons"
-        title="Buttons"
-        description={
-          language === "fa"
-            ? "انواع دکمه‌ها با variant های مختلف"
-            : "Various button variants and sizes"
-        }
+        title={t.components.buttons.title}
+        description={t.components.buttons.description}
         code={`import { Button } from "@/components/ui/button";
 
 <Button variant="default">Default</Button>
@@ -168,7 +162,7 @@ export default function ComponentsDemoPage() {
       >
         <div className="flex flex-wrap gap-4">
           <div className="space-y-2">
-            <p className="text-sm font-medium">Variants:</p>
+            <p className="text-sm font-medium">{t.components.buttons.variants}</p>
             <div className="flex flex-wrap gap-2">
               <Button variant="default">Default</Button>
               <Button variant="secondary">Secondary</Button>
@@ -180,7 +174,7 @@ export default function ComponentsDemoPage() {
           </div>
 
           <div className="w-full space-y-2">
-            <p className="text-sm font-medium">Sizes:</p>
+            <p className="text-sm font-medium">{t.components.buttons.sizes}</p>
             <div className="flex flex-wrap items-center gap-2">
               <Button size="sm">Small</Button>
               <Button size="default">Default</Button>
@@ -192,10 +186,10 @@ export default function ComponentsDemoPage() {
           </div>
 
           <div className="w-full space-y-2">
-            <p className="text-sm font-medium">States:</p>
+            <p className="text-sm font-medium">{t.components.buttons.states}</p>
             <div className="flex flex-wrap gap-2">
-              <Button>Normal</Button>
-              <Button disabled>Disabled</Button>
+              <Button>{t.components.buttons.normal}</Button>
+              <Button disabled>{t.components.buttons.disabled}</Button>
             </div>
           </div>
         </div>
@@ -204,10 +198,8 @@ export default function ComponentsDemoPage() {
       {/* Badges */}
       <ComponentSection
         id="badges"
-        title="Badges"
-        description={
-          language === "fa" ? "برچسب‌های رنگی" : "Colored badges"
-        }
+        title={t.components.badges.title}
+        description={t.components.badges.description}
         code={`import { Badge } from "@/components/ui/badge";
 
 <Badge variant="default">Default</Badge>
@@ -222,7 +214,7 @@ export default function ComponentsDemoPage() {
           <Badge variant="destructive">Destructive</Badge>
           <Badge>
             <Check className="mr-1 h-3 w-3" />
-            With Icon
+            {t.components.badges.withIcon}
           </Badge>
         </div>
       </ComponentSection>
@@ -230,10 +222,8 @@ export default function ComponentsDemoPage() {
       {/* Inputs */}
       <ComponentSection
         id="inputs"
-        title="Input Fields"
-        description={
-          language === "fa" ? "فیلدهای ورودی" : "Input components"
-        }
+        title={t.components.inputs.title}
+        description={t.components.inputs.description}
         code={`import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -245,16 +235,16 @@ import { Label } from "@/components/ui/label";
       >
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="demo-email">Email</Label>
+            <Label htmlFor="demo-email">{t.components.inputs.email}</Label>
             <Input id="demo-email" type="email" placeholder="you@example.com" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="demo-password">Password</Label>
+            <Label htmlFor="demo-password">{t.components.inputs.password}</Label>
             <Input id="demo-password" type="password" placeholder="••••••••" />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="demo-disabled">Disabled</Label>
-            <Input id="demo-disabled" disabled placeholder="Disabled input" />
+            <Label htmlFor="demo-disabled">{t.components.inputs.disabled}</Label>
+            <Input id="demo-disabled" disabled placeholder={t.components.inputs.disabledInput} />
           </div>
         </div>
       </ComponentSection>
@@ -262,8 +252,8 @@ import { Label } from "@/components/ui/label";
       {/* Select */}
       <ComponentSection
         id="select"
-        title="Select Dropdown"
-        description={language === "fa" ? "منوی انتخاب" : "Select menu"}
+        title={t.components.select.title}
+        description={t.components.select.description}
         code={`import { Select } from "@/components/ui/select";
 
 <Select>
@@ -273,12 +263,12 @@ import { Label } from "@/components/ui/label";
 </Select>`}
       >
         <div className="space-y-2">
-          <Label>Select an option</Label>
+          <Label>{t.components.select.selectOption}</Label>
           <Select>
-            <option value="">Select...</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
+            <option value="">{t.components.select.selectOption}</option>
+            <option value="1">{t.components.select.option} 1</option>
+            <option value="2">{t.components.select.option} 2</option>
+            <option value="3">{t.components.select.option} 3</option>
           </Select>
         </div>
       </ComponentSection>
@@ -286,8 +276,8 @@ import { Label } from "@/components/ui/label";
       {/* Switch */}
       <ComponentSection
         id="switch"
-        title="Switch Toggle"
-        description={language === "fa" ? "کلید تغییر حالت" : "Toggle switch"}
+        title={t.components.switch.title}
+        description={t.components.switch.description}
         code={`import { Switch } from "@/components/ui/switch";
 
 const [checked, setChecked] = useState(false);
@@ -296,11 +286,11 @@ const [checked, setChecked] = useState(false);
       >
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <Label>Enable notifications</Label>
+            <Label>{t.components.switch.enableNotif}</Label>
             <Switch checked={switchValue} onCheckedChange={setSwitchValue} />
           </div>
           <div className="flex items-center justify-between">
-            <Label>Disabled switch</Label>
+            <Label>{t.components.switch.disabledSwitch}</Label>
             <Switch disabled />
           </div>
         </div>
@@ -309,8 +299,8 @@ const [checked, setChecked] = useState(false);
       {/* Alerts */}
       <ComponentSection
         id="alerts"
-        title="Alerts"
-        description={language === "fa" ? "پیام‌های هشدار" : "Alert messages"}
+        title={t.components.alerts.title}
+        description={t.components.alerts.description}
         code={`import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 <Alert variant="default">
@@ -322,28 +312,28 @@ const [checked, setChecked] = useState(false);
         <div className="space-y-4">
           <Alert variant="default">
             <Info className="h-4 w-4" />
-            <AlertTitle>Info</AlertTitle>
-            <AlertDescription>This is an informational message.</AlertDescription>
+            <AlertTitle>{t.components.alerts.info}</AlertTitle>
+            <AlertDescription>{t.components.alerts.infoMsg}</AlertDescription>
           </Alert>
 
           <Alert variant="success">
             <Check className="h-4 w-4" />
-            <AlertTitle>Success</AlertTitle>
+            <AlertTitle>{t.components.alerts.success}</AlertTitle>
             <AlertDescription>
-              Operation completed successfully!
+              {t.components.alerts.successMsg}
             </AlertDescription>
           </Alert>
 
           <Alert variant="warning">
             <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>Warning</AlertTitle>
-            <AlertDescription>Please review before proceeding.</AlertDescription>
+            <AlertTitle>{t.components.alerts.warning}</AlertTitle>
+            <AlertDescription>{t.components.alerts.warningMsg}</AlertDescription>
           </Alert>
 
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>Something went wrong!</AlertDescription>
+            <AlertTitle>{t.components.alerts.error}</AlertTitle>
+            <AlertDescription>{t.components.alerts.errorMsg}</AlertDescription>
           </Alert>
         </div>
       </ComponentSection>
@@ -351,8 +341,8 @@ const [checked, setChecked] = useState(false);
       {/* Progress */}
       <ComponentSection
         id="progress"
-        title="Progress Bar"
-        description={language === "fa" ? "نوار پیشرفت" : "Progress indicator"}
+        title={t.components.progress.title}
+        description={t.components.progress.description}
         code={`import { Progress } from "@/components/ui/progress";
 
 <Progress value={25} />
@@ -390,8 +380,8 @@ const [checked, setChecked] = useState(false);
       {/* Avatar */}
       <ComponentSection
         id="avatar"
-        title="Avatar"
-        description={language === "fa" ? "تصویر کاربر" : "User avatar"}
+        title={t.components.avatar.title}
+        description={t.components.avatar.description}
         code={`import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 <Avatar>
@@ -403,13 +393,13 @@ const [checked, setChecked] = useState(false);
             <Avatar className="mx-auto">
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
-            <p className="text-xs text-muted-foreground">Default</p>
+            <p className="text-xs text-muted-foreground">{t.components.avatar.default}</p>
           </div>
           <div className="space-y-2 text-center">
             <Avatar className="mx-auto h-16 w-16">
               <AvatarFallback className="text-xl">AB</AvatarFallback>
             </Avatar>
-            <p className="text-xs text-muted-foreground">Large</p>
+            <p className="text-xs text-muted-foreground">{t.components.avatar.large}</p>
           </div>
           <div className="space-y-2 text-center">
             <Avatar className="mx-auto">
@@ -417,7 +407,7 @@ const [checked, setChecked] = useState(false);
                 UK
               </AvatarFallback>
             </Avatar>
-            <p className="text-xs text-muted-foreground">Colored</p>
+            <p className="text-xs text-muted-foreground">{t.components.avatar.colored}</p>
           </div>
         </div>
       </ComponentSection>
@@ -425,10 +415,8 @@ const [checked, setChecked] = useState(false);
       {/* Skeleton */}
       <ComponentSection
         id="skeleton"
-        title="Skeleton Loader"
-        description={
-          language === "fa" ? "بارگذاری placeholder" : "Loading placeholder"
-        }
+        title={t.components.skeleton.title}
+        description={t.components.skeleton.description}
         code={`import { Skeleton } from "@/components/ui/skeleton";
 
 <Skeleton className="h-4 w-[250px]" />
@@ -452,8 +440,8 @@ const [checked, setChecked] = useState(false);
       {/* Cards */}
       <ComponentSection
         id="cards"
-        title="Cards"
-        description={language === "fa" ? "کارت‌ها" : "Card components"}
+        title={t.components.cards.title}
+        description={t.components.cards.description}
         code={`import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 <Card>
@@ -469,20 +457,20 @@ const [checked, setChecked] = useState(false);
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>Simple Card</CardTitle>
-              <CardDescription>With description</CardDescription>
+              <CardTitle>{t.components.cards.simpleCard}</CardTitle>
+              <CardDescription>{t.components.cards.withDescription}</CardDescription>
             </CardHeader>
-            <CardContent>Card content goes here.</CardContent>
+            <CardContent>{t.components.cards.content}</CardContent>
           </Card>
 
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Check className="h-5 w-5 text-green-600" />
-                With Icon
+                {t.components.cards.withIcon}
               </CardTitle>
             </CardHeader>
-            <CardContent>Card with icon in title.</CardContent>
+            <CardContent>{t.components.cards.iconContent}</CardContent>
           </Card>
         </div>
       </ComponentSection>
@@ -490,8 +478,8 @@ const [checked, setChecked] = useState(false);
       {/* Table */}
       <ComponentSection
         id="table"
-        title="Table"
-        description={language === "fa" ? "جدول داده" : "Data table"}
+        title={t.components.table.title}
+        description={t.components.table.description}
         code={`import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 
 <Table>
@@ -512,9 +500,9 @@ const [checked, setChecked] = useState(false);
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>{t.components.table.name}</TableHead>
+              <TableHead>{t.components.table.email}</TableHead>
+              <TableHead>{t.components.table.status}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -522,14 +510,14 @@ const [checked, setChecked] = useState(false);
               <TableCell className="font-medium">John Doe</TableCell>
               <TableCell>john@example.com</TableCell>
               <TableCell>
-                <Badge>Active</Badge>
+                <Badge>{t.users.active}</Badge>
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="font-medium">Jane Smith</TableCell>
               <TableCell>jane@example.com</TableCell>
               <TableCell>
-                <Badge variant="secondary">Inactive</Badge>
+                <Badge variant="secondary">{t.users.inactive}</Badge>
               </TableCell>
             </TableRow>
           </TableBody>
@@ -539,8 +527,8 @@ const [checked, setChecked] = useState(false);
       {/* Tabs */}
       <ComponentSection
         id="tabs"
-        title="Tabs"
-        description={language === "fa" ? "تب‌ها" : "Tab navigation"}
+        title={t.components.tabs.title}
+        description={t.components.tabs.description}
         code={`import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 <Tabs defaultValue="tab1">
@@ -554,26 +542,26 @@ const [checked, setChecked] = useState(false);
       >
         <Tabs defaultValue="account">
           <TabsList>
-            <TabsTrigger value="account">Account</TabsTrigger>
-            <TabsTrigger value="password">Password</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
+            <TabsTrigger value="account">{t.components.tabs.account}</TabsTrigger>
+            <TabsTrigger value="password">{t.components.tabs.password}</TabsTrigger>
+            <TabsTrigger value="settings">{t.components.tabs.settings}</TabsTrigger>
           </TabsList>
           <TabsContent value="account" className="space-y-2">
-            <h3 className="font-medium">Account Settings</h3>
+            <h3 className="font-medium">{t.components.tabs.accountSettings}</h3>
             <p className="text-sm text-muted-foreground">
-              Manage your account settings here.
+              {t.components.tabs.accountDesc}
             </p>
           </TabsContent>
           <TabsContent value="password" className="space-y-2">
-            <h3 className="font-medium">Password</h3>
+            <h3 className="font-medium">{t.components.tabs.passwordTitle}</h3>
             <p className="text-sm text-muted-foreground">
-              Change your password here.
+              {t.components.tabs.passwordDesc}
             </p>
           </TabsContent>
           <TabsContent value="settings" className="space-y-2">
-            <h3 className="font-medium">Settings</h3>
+            <h3 className="font-medium">{t.components.tabs.settingsTitle}</h3>
             <p className="text-sm text-muted-foreground">
-              Configure your preferences.
+              {t.components.tabs.settingsDesc}
             </p>
           </TabsContent>
         </Tabs>
@@ -582,8 +570,8 @@ const [checked, setChecked] = useState(false);
       {/* Dialog */}
       <ComponentSection
         id="dialog"
-        title="Dialog Modal"
-        description={language === "fa" ? "پنجره‌های باز شونده" : "Modal dialogs"}
+        title={t.components.dialog.title}
+        description={t.components.dialog.description}
         code={`import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const [open, setOpen] = useState(false);
@@ -598,27 +586,27 @@ const [open, setOpen] = useState(false);
   </DialogContent>
 </Dialog>`}
       >
-        <Button onClick={() => setDialogOpen(true)}>Open Dialog</Button>
+        <Button onClick={() => setDialogOpen(true)}>{t.components.dialog.openDialog}</Button>
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogContent>
             <DialogClose onClick={() => setDialogOpen(false)} />
             <DialogHeader>
-              <DialogTitle>Example Dialog</DialogTitle>
+              <DialogTitle>{t.components.dialog.exampleDialog}</DialogTitle>
               <DialogDescription>
-                This is an example dialog with content.
+                {t.components.dialog.dialogDesc}
               </DialogDescription>
             </DialogHeader>
             <div className="py-4">
               <p className="text-sm">
-                Dialogs are great for capturing user attention and getting input.
+                {t.components.dialog.dialogContent}
               </p>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                Cancel
+                {t.components.dialog.cancel}
               </Button>
-              <Button onClick={() => setDialogOpen(false)}>Confirm</Button>
+              <Button onClick={() => setDialogOpen(false)}>{t.components.dialog.confirm}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -627,8 +615,8 @@ const [open, setOpen] = useState(false);
       {/* Dropdown Menu */}
       <ComponentSection
         id="dropdown"
-        title="Dropdown Menu"
-        description={language === "fa" ? "منوی کشویی" : "Dropdown menu"}
+        title={t.components.dropdown.title}
+        description={t.components.dropdown.description}
         code={`import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 <DropdownMenu>
@@ -643,15 +631,15 @@ const [open, setOpen] = useState(false);
       >
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button variant="outline">Open Menu</Button>
+            <Button variant="outline">{t.components.dropdown.openMenu}</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>{t.components.dropdown.myAccount}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem>{t.components.dropdown.profile}</DropdownMenuItem>
+            <DropdownMenuItem>{t.components.dropdown.settings}</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Logout</DropdownMenuItem>
+            <DropdownMenuItem>{t.components.dropdown.logout}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </ComponentSection>
@@ -661,12 +649,10 @@ const [open, setOpen] = useState(false);
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Palette className="h-5 w-5" />
-            {language === "fa" ? "مثال ترکیبی" : "Combined Example"}
+            {t.components.combined.title}
           </CardTitle>
           <CardDescription>
-            {language === "fa"
-              ? "استفاده از چند کامپوننت با هم"
-              : "Multiple components working together"}
+            {t.components.combined.description}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -685,18 +671,18 @@ const [open, setOpen] = useState(false);
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label>Email Notifications</Label>
+                <Label>{t.components.combined.emailNotif}</Label>
                 <Switch />
               </div>
               <div className="space-y-2">
-                <Label>Completion</Label>
+                <Label>{t.components.combined.completion}</Label>
                 <Progress value={65} />
-                <p className="text-xs text-muted-foreground">65% Complete</p>
+                <p className="text-xs text-muted-foreground">65% {t.components.combined.percentComplete}</p>
               </div>
               <div className="flex gap-2">
-                <Button className="flex-1">Save</Button>
+                <Button className="flex-1">{t.components.combined.save}</Button>
                 <Button variant="outline" className="flex-1">
-                  Cancel
+                  {t.components.combined.cancel}
                 </Button>
               </div>
             </CardContent>
@@ -708,12 +694,10 @@ const [open, setOpen] = useState(false);
       <Card>
         <CardHeader>
           <CardTitle>
-            {language === "fa" ? "پالت رنگ" : "Color Palette"}
+            {t.components.colorPalette.title}
           </CardTitle>
           <CardDescription>
-            {language === "fa"
-              ? "رنگ‌های سیستم طراحی"
-              : "Design system colors"}
+            {t.components.colorPalette.description}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -737,7 +721,7 @@ const [open, setOpen] = useState(false);
                 className={`rounded-lg p-4 ${color.class}`}
               >
                 <p className="font-medium">{color.name}</p>
-                <p className="text-sm opacity-80">Sample text</p>
+                <p className="text-sm opacity-80">{t.components.colorPalette.sampleText}</p>
               </div>
             ))}
           </div>

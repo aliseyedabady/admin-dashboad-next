@@ -30,7 +30,7 @@ interface Notification {
 }
 
 export default function NotificationsPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: "1",
@@ -116,7 +116,7 @@ export default function NotificationsPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{t.notifications.title}</h1>
           <p className="text-muted-foreground">
-            {unreadCount} {t.notifications.unread}
+            {unreadCount} {t.notifications.unreadCount}
           </p>
         </div>
         <div className="flex gap-2">
@@ -133,7 +133,7 @@ export default function NotificationsPage() {
             {t.notifications.all} ({notifications.length})
           </TabsTrigger>
           <TabsTrigger value="unread">
-            {t.common.search} ({unreadCount})
+            {language === "fa" ? "خوانده نشده" : "Unread"} ({unreadCount})
           </TabsTrigger>
           <TabsTrigger value="read">
             {t.notifications.read} ({notifications.length - unreadCount})

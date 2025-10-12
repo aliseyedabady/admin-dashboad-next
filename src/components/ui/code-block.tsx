@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "./button";
 import { Check, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/language-context";
 
 interface CodeBlockProps {
   code: string;
@@ -13,6 +14,7 @@ interface CodeBlockProps {
 
 export function CodeBlock({ code, language = "tsx", className }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
+  const { t } = useLanguage();
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
@@ -66,12 +68,12 @@ export function CodeBlock({ code, language = "tsx", className }: CodeBlockProps)
           {copied ? (
             <>
               <Check className="h-3 w-3" />
-              <span className="text-xs">کپی شد!</span>
+              <span className="text-xs">{t.components.copied}</span>
             </>
           ) : (
             <>
               <Copy className="h-3 w-3" />
-              <span className="text-xs">کپی کد</span>
+              <span className="text-xs">{t.components.copyCode}</span>
             </>
           )}
         </Button>
