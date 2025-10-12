@@ -238,10 +238,13 @@ export const fa = {
     add: "افزودن",
     search: "جستجو",
     filter: "فیلتر",
+    filters: "فیلترها",
     sort: "مرتب‌سازی",
     actions: "عملیات",
     noData: "داده‌ای یافت نشد",
     language: "زبان",
+    clear: "پاک کردن",
+    apply: "اعمال",
   },
 
   // Status

@@ -238,10 +238,13 @@ export const en = {
     add: "Add",
     search: "Search",
     filter: "Filter",
+    filters: "Filters",
     sort: "Sort",
     actions: "Actions",
     noData: "No data found",
     language: "Language",
+    clear: "Clear",
+    apply: "Apply",
   },
 
   // Status

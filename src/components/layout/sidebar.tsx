@@ -13,6 +13,7 @@ import {
   UserCircle,
   TrendingUp,
   Bell,
+  Boxes,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/language-context";
@@ -57,6 +58,11 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
       name: t.nav.notifications,
       href: "/notifications",
       icon: Bell,
+    },
+    {
+      name: dir === "rtl" ? "کامپوننت‌ها" : "Components",
+      href: "/components-demo",
+      icon: Boxes,
     },
     {
       name: t.nav.profile,

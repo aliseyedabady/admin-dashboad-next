@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { User } from "@/types";
@@ -102,50 +102,142 @@ export default function UsersPage() {
         <p className="text-muted-foreground">{t.users.subtitle}</p>
       </div>
 
+      {/* Search & Filters Card */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-base">{t.common.filter}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Search */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder={t.users.searchUsers}
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="pl-10"
+            />
+          </div>
+
+          {/* Role Filter */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">{t.users.role}</Label>
+            <div className="flex flex-wrap gap-2">
+              {["all", "Admin", "Editor", "Viewer"].map((role) => (
+                <Button
+                  key={role}
+                  variant={roleFilter === role ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => {
+                    setRoleFilter(role);
+                    setCurrentPage(1);
+                  }}
+                  className="min-w-[80px]"
+                >
+                  {role === "all"
+                    ? t.users.allRoles
+                    : t.users[role.toLowerCase() as keyof typeof t.users]}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          {/* Status Filter */}
+          <div className="space-y-2">
+            <Label className="text-sm font-medium">{t.users.status}</Label>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant={statusFilter === "all" ? "default" : "outline"}
+                size="sm"
+                onClick={() => {
+                  setStatusFilter("all");
+                  setCurrentPage(1);
+                }}
+                className="min-w-[80px]"
+              >
+                {t.users.allStatus}
+              </Button>
+              <Button
+                variant={statusFilter === "active" ? "default" : "outline"}
+                size="sm"
+                onClick={() => {
+                  setStatusFilter("active");
+                  setCurrentPage(1);
+                }}
+                className="min-w-[80px]"
+              >
+                <span className="mr-2 h-2 w-2 rounded-full bg-green-500"></span>
+                {t.users.active}
+              </Button>
+              <Button
+                variant={statusFilter === "inactive" ? "default" : "outline"}
+                size="sm"
+                onClick={() => {
+                  setStatusFilter("inactive");
+                  setCurrentPage(1);
+                }}
+                className="min-w-[80px]"
+              >
+                <span className="mr-2 h-2 w-2 rounded-full bg-gray-400"></span>
+                {t.users.inactive}
+              </Button>
+            </div>
+          </div>
+
+          {/* Active Filters Display */}
+          {(searchTerm || roleFilter !== "all" || statusFilter !== "all") && (
+            <div className="flex items-center gap-2 rounded-md bg-muted p-3">
+              <span className="text-sm font-medium">{t.common.filter}:</span>
+              {searchTerm && (
+                <Badge variant="secondary" className="gap-1">
+                  {t.common.search}: {searchTerm}
+                  <button
+                    onClick={() => setSearchTerm("")}
+                    className="ml-1 hover:text-destructive"
+                  >
+                    ×
+                  </button>
+                </Badge>
+              )}
+              {roleFilter !== "all" && (
+                <Badge variant="secondary" className="gap-1">
+                  {t.users.role}: {roleFilter}
+                  <button
+                    onClick={() => setRoleFilter("all")}
+                    className="ml-1 hover:text-destructive"
+                  >
+                    ×
+                  </button>
+                </Badge>
+              )}
+              {statusFilter !== "all" && (
+                <Badge variant="secondary" className="gap-1">
+                  {t.users.status}: {statusFilter}
+                  <button
+                    onClick={() => setStatusFilter("all")}
+                    className="ml-1 hover:text-destructive"
+                  >
+                    ×
+                  </button>
+                </Badge>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Table Card */}
       <Card>
         <CardHeader>
           <CardTitle>{t.users.allUsers}</CardTitle>
-          <CardDescription>{t.users.allUsersDesc}</CardDescription>
+          <CardDescription>
+            {filteredAndSortedUsers.length} {t.users.of} {users?.length || 0}
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Filters */}
-          <div className="mb-4 flex flex-col gap-4 md:flex-row">
-            <div className="relative flex-1">
-              <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-              <Input
-                placeholder={t.users.searchUsers}
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="pl-10"
-              />
-            </div>
-            <Select
-              value={roleFilter}
-              onChange={(e) => {
-                setRoleFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-            >
-              <option value="all">{t.users.allRoles}</option>
-              <option value="Admin">{t.users.admin}</option>
-              <option value="Editor">{t.users.editor}</option>
-              <option value="Viewer">{t.users.viewer}</option>
-            </Select>
-            <Select
-              value={statusFilter}
-              onChange={(e) => {
-                setStatusFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-            >
-              <option value="all">{t.users.allStatus}</option>
-              <option value="active">{t.users.active}</option>
-              <option value="inactive">{t.users.inactive}</option>
-            </Select>
-          </div>
 
           {/* Table */}
           <Table>
