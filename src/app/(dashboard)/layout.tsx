@@ -43,10 +43,10 @@ export default function DashboardLayout({
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div
-            className="bg-background/80 absolute inset-0 backdrop-blur-sm"
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-300"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <aside className="absolute top-0 bottom-0 left-0">
+          <aside className="absolute left-0 top-0 h-full transform transition-transform duration-300 ease-out">
             <Sidebar
               isCollapsed={false}
               setIsCollapsed={() => setIsMobileMenuOpen(false)}

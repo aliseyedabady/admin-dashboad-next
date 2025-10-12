@@ -52,7 +52,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
   return (
     <div
       className={cn(
-        "bg-card relative flex flex-col border-r transition-all duration-300",
+        "relative flex h-full flex-col border-r bg-card transition-all duration-300",
         isCollapsed ? "w-16" : "w-64"
       )}
     >
@@ -76,7 +76,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 space-y-1 p-2">
+      <nav className="flex-1 space-y-1 overflow-y-auto p-2">
         {navigation.map((item) => {
           const isActive = pathname === item.href;
           return (
