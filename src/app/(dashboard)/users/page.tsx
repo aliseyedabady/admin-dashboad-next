@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { useLanguage } from "@/contexts/language-context";
 import {
   Card,
   CardContent,
@@ -26,6 +27,7 @@ import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { User } from "@/types";
 
 export default function UsersPage() {
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<keyof User>("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
@@ -96,18 +98,14 @@ export default function UsersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Users</h1>
-        <p className="text-muted-foreground">
-          Manage your users and their account permissions here.
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">{t.users.title}</h1>
+        <p className="text-muted-foreground">{t.users.subtitle}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>All Users</CardTitle>
-          <CardDescription>
-            A list of all users in your application
-          </CardDescription>
+          <CardTitle>{t.users.allUsers}</CardTitle>
+          <CardDescription>{t.users.allUsersDesc}</CardDescription>
         </CardHeader>
         <CardContent>
           {/* Filters */}
@@ -115,7 +113,7 @@ export default function UsersPage() {
             <div className="relative flex-1">
               <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
               <Input
-                placeholder="Search by name or email..."
+                placeholder={t.users.searchUsers}
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value);
@@ -131,10 +129,10 @@ export default function UsersPage() {
                 setCurrentPage(1);
               }}
             >
-              <option value="all">All Roles</option>
-              <option value="Admin">Admin</option>
-              <option value="Editor">Editor</option>
-              <option value="Viewer">Viewer</option>
+              <option value="all">{t.users.allRoles}</option>
+              <option value="Admin">{t.users.admin}</option>
+              <option value="Editor">{t.users.editor}</option>
+              <option value="Viewer">{t.users.viewer}</option>
             </Select>
             <Select
               value={statusFilter}
@@ -143,9 +141,9 @@ export default function UsersPage() {
                 setCurrentPage(1);
               }}
             >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="all">{t.users.allStatus}</option>
+              <option value="active">{t.users.active}</option>
+              <option value="inactive">{t.users.inactive}</option>
             </Select>
           </div>
 
@@ -160,7 +158,7 @@ export default function UsersPage() {
                     className="h-8 px-2"
                     onClick={() => handleSort("name")}
                   >
-                    Name
+                    {t.users.name}
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                   </Button>
                 </TableHead>
@@ -171,12 +169,12 @@ export default function UsersPage() {
                     className="h-8 px-2"
                     onClick={() => handleSort("email")}
                   >
-                    Email
+                    {t.users.email}
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                   </Button>
                 </TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>{t.users.role}</TableHead>
+                <TableHead>{t.users.status}</TableHead>
                 <TableHead>
                   <Button
                     variant="ghost"
@@ -184,7 +182,7 @@ export default function UsersPage() {
                     className="h-8 px-2"
                     onClick={() => handleSort("createdAt")}
                   >
-                    Created
+                    {t.users.created}
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                   </Button>
                 </TableHead>
@@ -194,7 +192,7 @@ export default function UsersPage() {
               {paginatedUsers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center">
-                    No users found
+                    {t.users.noUsers}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -211,7 +209,7 @@ export default function UsersPage() {
                           user.status === "active" ? "default" : "secondary"
                         }
                       >
-                        {user.status}
+                        {t.users[user.status as keyof typeof t.users]}
                       </Badge>
                     </TableCell>
                     <TableCell>{user.createdAt}</TableCell>
@@ -224,12 +222,12 @@ export default function UsersPage() {
           {/* Pagination */}
           <div className="mt-4 flex items-center justify-between">
             <p className="text-muted-foreground text-sm">
-              Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+              {t.users.showing} {(currentPage - 1) * itemsPerPage + 1} {t.users.to}{" "}
               {Math.min(
                 currentPage * itemsPerPage,
                 filteredAndSortedUsers.length
               )}{" "}
-              of {filteredAndSortedUsers.length} users
+              {t.users.of} {filteredAndSortedUsers.length}
             </p>
             <div className="flex items-center space-x-2">
               <Button
@@ -239,7 +237,7 @@ export default function UsersPage() {
                 disabled={currentPage === 1}
               >
                 <ChevronLeft className="h-4 w-4" />
-                Previous
+                {t.users.previous}
               </Button>
               <div className="flex items-center gap-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
@@ -264,7 +262,7 @@ export default function UsersPage() {
                 }
                 disabled={currentPage === totalPages}
               >
-                Next
+                {t.users.next}
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </div>

@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { useLanguage } from "@/contexts/language-context";
 import {
   Card,
   CardContent,
@@ -21,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { ShoppingCart } from "lucide-react";
 
 export default function OrdersPage() {
+  const { t } = useLanguage();
   const { data: orders, isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: api.getOrders,
@@ -42,7 +44,7 @@ export default function OrdersPage() {
   if (isLoading) {
     return (
       <div className="flex h-full items-center justify-center">
-        <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
       </div>
     );
   }
@@ -50,34 +52,30 @@ export default function OrdersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Orders</h1>
-        <p className="text-muted-foreground">
-          View and manage all orders from your customers.
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">{t.orders.title}</h1>
+        <p className="text-muted-foreground">{t.orders.subtitle}</p>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>All Orders</CardTitle>
-              <CardDescription>
-                A complete list of all customer orders
-              </CardDescription>
+              <CardTitle>{t.orders.allOrders}</CardTitle>
+              <CardDescription>{t.orders.allOrdersDesc}</CardDescription>
             </div>
-            <ShoppingCart className="text-muted-foreground h-8 w-8" />
+            <ShoppingCart className="h-8 w-8 text-muted-foreground" />
           </div>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Product</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead>{t.dashboard.orderId}</TableHead>
+                <TableHead>{t.dashboard.customer}</TableHead>
+                <TableHead>{t.dashboard.product}</TableHead>
+                <TableHead>{t.dashboard.amount}</TableHead>
+                <TableHead>{t.dashboard.status}</TableHead>
+                <TableHead>{t.dashboard.date}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -89,7 +87,7 @@ export default function OrdersPage() {
                   <TableCell>${order.amount.toFixed(2)}</TableCell>
                   <TableCell>
                     <Badge variant={getStatusColor(order.status)}>
-                      {order.status}
+                      {t.orders[order.status as keyof typeof t.orders]}
                     </Badge>
                   </TableCell>
                   <TableCell>{order.date}</TableCell>

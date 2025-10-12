@@ -7,9 +7,11 @@ import { OverviewChart } from "@/components/dashboard/overview-chart";
 import { RecentOrders } from "@/components/dashboard/recent-orders";
 import { DollarSign, Users, ShoppingCart, TrendingUp } from "lucide-react";
 import { mockAuth } from "@/lib/auth";
+import { useLanguage } from "@/contexts/language-context";
 import { useEffect, useState } from "react";
 
 export default function DashboardPage() {
+  const { t } = useLanguage();
   const [userName, setUserName] = useState("User");
 
   useEffect(() => {
@@ -47,35 +49,35 @@ export default function DashboardPage() {
       {/* Welcome message */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
-          Welcome back, {userName}!
+          {t.dashboard.welcome}، {userName}!
         </h1>
         <p className="text-muted-foreground">
-          Here&apos;s what&apos;s happening with your store today.
+          {t.dashboard.subtitle}
         </p>
       </div>
 
       {/* Stats cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Total Sales"
+          title={t.dashboard.totalSales}
           value={stats?.sales.value.toLocaleString() || 0}
           change={stats?.sales.change || 0}
           icon={DollarSign}
         />
         <StatCard
-          title="Total Users"
+          title={t.dashboard.totalUsers}
           value={stats?.users.value.toLocaleString() || 0}
           change={stats?.users.change || 0}
           icon={Users}
         />
         <StatCard
-          title="Total Orders"
+          title={t.dashboard.totalOrders}
           value={stats?.orders.value.toLocaleString() || 0}
           change={stats?.orders.change || 0}
           icon={ShoppingCart}
         />
         <StatCard
-          title="Total Revenue"
+          title={t.dashboard.totalRevenue}
           value={`$${stats?.revenue.value.toLocaleString() || 0}`}
           change={stats?.revenue.change || 0}
           icon={TrendingUp}

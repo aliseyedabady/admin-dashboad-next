@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { mockAuth } from "@/lib/auth";
+import { useLanguage } from "@/contexts/language-context";
 import { User, Mail, Phone, MapPin, Calendar, CheckCircle2 } from "lucide-react";
 
 const profileSchema = yup.object().shape({
@@ -65,6 +66,7 @@ interface SecurityFormData {
 }
 
 export default function ProfilePage() {
+  const { t } = useLanguage();
   const [user, setUser] = useState<{ name: string; email: string } | null>(
     null
   );
@@ -75,8 +77,8 @@ export default function ProfilePage() {
     handleSubmit: handleProfileSubmit,
     setValue,
     formState: { errors: profileErrors, isSubmitting: isProfileSubmitting },
-  } = useForm<ProfileFormData>({
-    resolver: yupResolver(profileSchema) as any,
+  } = useForm({
+    resolver: yupResolver(profileSchema),
   });
 
   const {
@@ -84,8 +86,8 @@ export default function ProfilePage() {
     handleSubmit: handleSecuritySubmit,
     reset: resetSecurity,
     formState: { errors: securityErrors, isSubmitting: isSecuritySubmitting },
-  } = useForm<SecurityFormData>({
-    resolver: yupResolver(securitySchema) as any,
+  } = useForm({
+    resolver: yupResolver(securitySchema),
   });
 
   useEffect(() => {
@@ -125,16 +127,14 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
-        <p className="text-muted-foreground">
-          Manage your profile and account settings
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">{t.profile.title}</h1>
+        <p className="text-muted-foreground">{t.profile.subtitle}</p>
       </div>
 
       {showSuccess && (
         <Alert variant="success">
           <CheckCircle2 className="h-4 w-4" />
-          <AlertDescription>Profile updated successfully!</AlertDescription>
+          <AlertDescription>{t.profile.updateSuccess}</AlertDescription>
         </Alert>
       )}
 
@@ -142,7 +142,7 @@ export default function ProfilePage() {
         {/* Profile Card */}
         <Card className="md:col-span-1">
           <CardHeader>
-            <CardTitle>Profile Picture</CardTitle>
+            <CardTitle>{t.profile.profilePicture}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center space-y-4">
             <Avatar className="h-32 w-32">
@@ -154,9 +154,9 @@ export default function ProfilePage() {
               <h3 className="text-lg font-semibold">{user?.name}</h3>
               <p className="text-sm text-muted-foreground">{user?.email}</p>
             </div>
-            <Badge>Admin User</Badge>
+            <Badge>{t.profile.adminUser}</Badge>
             <Button variant="outline" className="w-full">
-              Change Avatar
+              {t.profile.changeAvatar}
             </Button>
           </CardContent>
         </Card>
@@ -166,9 +166,9 @@ export default function ProfilePage() {
           <Tabs defaultValue="general">
             <CardHeader>
               <TabsList>
-                <TabsTrigger value="general">General</TabsTrigger>
-                <TabsTrigger value="security">Security</TabsTrigger>
-                <TabsTrigger value="activity">Activity</TabsTrigger>
+                <TabsTrigger value="general">{t.profile.general}</TabsTrigger>
+                <TabsTrigger value="security">{t.profile.security}</TabsTrigger>
+                <TabsTrigger value="activity">{t.profile.activity}</TabsTrigger>
               </TabsList>
             </CardHeader>
             <CardContent>
@@ -178,7 +178,7 @@ export default function ProfilePage() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
+                    <Label htmlFor="name">{t.profile.fullName}</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -194,7 +194,7 @@ export default function ProfilePage() {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email Address</Label>
+                    <Label htmlFor="email">{t.profile.email}</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -211,7 +211,7 @@ export default function ProfilePage() {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
+                    <Label htmlFor="phone">{t.profile.phone}</Label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -229,7 +229,7 @@ export default function ProfilePage() {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="location">Location</Label>
+                    <Label htmlFor="location">{t.profile.location}</Label>
                     <div className="relative">
                       <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -246,7 +246,7 @@ export default function ProfilePage() {
                     )}
                   </div>
                   <Button type="submit" className="w-full" disabled={isProfileSubmitting}>
-                    {isProfileSubmitting ? "Saving..." : "Save Changes"}
+                    {isProfileSubmitting ? t.profile.saving : t.profile.saveChanges}
                   </Button>
                 </form>
               </TabsContent>
@@ -257,11 +257,11 @@ export default function ProfilePage() {
                   className="space-y-4"
                 >
                   <div className="space-y-2">
-                    <Label htmlFor="current-password">Current Password</Label>
+                    <Label htmlFor="current-password">{t.profile.currentPassword}</Label>
                     <Input
                       id="current-password"
                       type="password"
-                      placeholder="Enter current password"
+                      placeholder={t.profile.currentPassword}
                       {...registerSecurity("currentPassword")}
                     />
                     {securityErrors.currentPassword && (
@@ -271,11 +271,11 @@ export default function ProfilePage() {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="new-password">New Password</Label>
+                    <Label htmlFor="new-password">{t.profile.newPassword}</Label>
                     <Input
                       id="new-password"
                       type="password"
-                      placeholder="Enter new password"
+                      placeholder={t.profile.newPassword}
                       {...registerSecurity("newPassword")}
                     />
                     {securityErrors.newPassword && (
@@ -285,11 +285,11 @@ export default function ProfilePage() {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="confirm-password">Confirm Password</Label>
+                    <Label htmlFor="confirm-password">{t.profile.confirmPassword}</Label>
                     <Input
                       id="confirm-password"
                       type="password"
-                      placeholder="Confirm new password"
+                      placeholder={t.profile.confirmPassword}
                       {...registerSecurity("confirmPassword")}
                     />
                     {securityErrors.confirmPassword && (
@@ -299,7 +299,7 @@ export default function ProfilePage() {
                     )}
                   </div>
                   <Button type="submit" className="w-full" disabled={isSecuritySubmitting}>
-                    {isSecuritySubmitting ? "Updating..." : "Update Password"}
+                    {isSecuritySubmitting ? t.profile.updating : t.profile.updatePassword}
                   </Button>
                 </form>
               </TabsContent>
@@ -308,18 +308,18 @@ export default function ProfilePage() {
                 <div className="space-y-4">
                   {[
                     {
-                      action: "Logged in",
-                      date: "Today at 9:42 AM",
+                      action: t.profile.loggedIn,
+                      date: `${t.profile.today} 9:42 AM`,
                       device: "Chrome on MacOS",
                     },
                     {
-                      action: "Profile updated",
-                      date: "Yesterday at 4:12 PM",
+                      action: t.profile.profileUpdated,
+                      date: `${t.profile.yesterday} 4:12 PM`,
                       device: "Safari on iPhone",
                     },
                     {
-                      action: "Password changed",
-                      date: "3 days ago",
+                      action: t.profile.passwordChanged,
+                      date: `3 ${t.profile.daysAgo}`,
                       device: "Chrome on Windows",
                     },
                   ].map((item, index) => (
@@ -348,4 +348,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

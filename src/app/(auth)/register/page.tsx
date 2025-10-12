@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { mockAuth } from "@/lib/auth";
+import { useLanguage } from "@/contexts/language-context";
 import { UserPlus } from "lucide-react";
 
 const registerSchema = yup.object().shape({
@@ -42,6 +43,7 @@ type RegisterFormData = yup.InferType<typeof registerSchema>;
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const {
     register,
     handleSubmit,
@@ -78,10 +80,10 @@ export default function RegisterPage() {
           </div>
         </div>
         <CardTitle className="text-center text-2xl">
-          Create an account
+          {t.auth.register.title}
         </CardTitle>
         <CardDescription className="text-center">
-          Enter your information to get started
+          {t.auth.register.subtitle}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -92,11 +94,11 @@ export default function RegisterPage() {
             </div>
           )}
           <div className="space-y-2">
-            <Label htmlFor="name">Full Name</Label>
+            <Label htmlFor="name">{t.auth.register.name}</Label>
             <Input
               id="name"
               type="text"
-              placeholder="John Doe"
+              placeholder={t.auth.register.name}
               {...register("name")}
             />
             {errors.name && (
@@ -104,11 +106,11 @@ export default function RegisterPage() {
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t.auth.register.email}</Label>
             <Input
               id="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder={t.auth.register.email}
               {...register("email")}
             />
             {errors.email && (
@@ -116,11 +118,11 @@ export default function RegisterPage() {
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t.auth.register.password}</Label>
             <Input
               id="password"
               type="password"
-              placeholder="Create a password"
+              placeholder={t.auth.register.password}
               {...register("password")}
             />
             {errors.password && (
@@ -130,11 +132,11 @@ export default function RegisterPage() {
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Label htmlFor="confirmPassword">{t.auth.register.confirmPassword}</Label>
             <Input
               id="confirmPassword"
               type="password"
-              placeholder="Confirm your password"
+              placeholder={t.auth.register.confirmPassword}
               {...register("confirmPassword")}
             />
             {errors.confirmPassword && (
@@ -146,15 +148,15 @@ export default function RegisterPage() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Creating account..." : "Create account"}
+            {isSubmitting ? t.auth.register.creatingAccount : t.auth.register.createAccount}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
+            {t.auth.register.haveAccount}{" "}
             <Link
               href="/login"
               className="font-medium text-primary hover:underline"
             >
-              Sign in
+              {t.auth.register.signIn}
             </Link>
           </p>
         </CardFooter>

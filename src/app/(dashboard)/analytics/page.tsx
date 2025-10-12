@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLanguage } from "@/contexts/language-context";
 import {
   TrendingUp,
   TrendingDown,
@@ -17,30 +18,32 @@ import {
 } from "lucide-react";
 
 export default function AnalyticsPage() {
+  const { t } = useLanguage();
+
   const metrics = [
     {
-      title: "Page Views",
+      title: t.analytics.pageViews,
       value: "45,231",
       change: "+12.5%",
       isPositive: true,
       icon: Eye,
     },
     {
-      title: "Unique Visitors",
+      title: t.analytics.uniqueVisitors,
       value: "8,459",
       change: "+8.2%",
       isPositive: true,
       icon: Users,
     },
     {
-      title: "Bounce Rate",
+      title: t.analytics.bounceRate,
       value: "42.3%",
       change: "-3.8%",
       isPositive: true,
       icon: TrendingDown,
     },
     {
-      title: "Avg. Session",
+      title: t.analytics.avgSession,
       value: "3m 24s",
       change: "+15.3%",
       isPositive: true,
@@ -49,10 +52,10 @@ export default function AnalyticsPage() {
   ];
 
   const trafficSources = [
-    { name: "Direct", value: 45, color: "bg-blue-500" },
-    { name: "Organic Search", value: 30, color: "bg-green-500" },
-    { name: "Social Media", value: 15, color: "bg-purple-500" },
-    { name: "Referral", value: 10, color: "bg-orange-500" },
+    { name: t.analytics.direct, value: 45, color: "bg-blue-500" },
+    { name: t.analytics.organicSearch, value: 30, color: "bg-green-500" },
+    { name: t.analytics.socialMedia, value: 15, color: "bg-purple-500" },
+    { name: t.analytics.referral, value: 10, color: "bg-orange-500" },
   ];
 
   const topPages = [
@@ -66,10 +69,8 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
-        <p className="text-muted-foreground">
-          Detailed analytics and insights for your business
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">{t.analytics.title}</h1>
+        <p className="text-muted-foreground">{t.analytics.subtitle}</p>
       </div>
 
       {/* Metrics Grid */}
@@ -87,7 +88,7 @@ export default function AnalyticsPage() {
               <p
                 className={`text-xs ${metric.isPositive ? "text-green-600" : "text-red-600"}`}
               >
-                {metric.change} from last month
+                {metric.change} {t.dashboard.fromLastMonth}
               </p>
             </CardContent>
           </Card>
@@ -98,8 +99,8 @@ export default function AnalyticsPage() {
         {/* Traffic Sources */}
         <Card>
           <CardHeader>
-            <CardTitle>Traffic Sources</CardTitle>
-            <CardDescription>Where your visitors come from</CardDescription>
+            <CardTitle>{t.analytics.trafficSources}</CardTitle>
+            <CardDescription>{t.analytics.trafficSourcesDesc}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {trafficSources.map((source, index) => (
@@ -117,8 +118,8 @@ export default function AnalyticsPage() {
         {/* Top Pages */}
         <Card>
           <CardHeader>
-            <CardTitle>Top Pages</CardTitle>
-            <CardDescription>Most visited pages this month</CardDescription>
+            <CardTitle>{t.analytics.topPages}</CardTitle>
+            <CardDescription>{t.analytics.topPagesDesc}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -130,14 +131,14 @@ export default function AnalyticsPage() {
                   <div className="flex-1">
                     <p className="text-sm font-medium">{page.page}</p>
                     <p className="text-xs text-muted-foreground">
-                      Avg. time: {page.time}
+                      {t.analytics.avgTime}: {page.time}
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm font-bold">
                       {page.views.toLocaleString()}
                     </p>
-                    <p className="text-xs text-muted-foreground">views</p>
+                    <p className="text-xs text-muted-foreground">{t.analytics.views}</p>
                   </div>
                 </div>
               ))}
@@ -151,18 +152,18 @@ export default function AnalyticsPage() {
         <Tabs defaultValue="overview">
           <CardHeader>
             <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="engagement">Engagement</TabsTrigger>
-              <TabsTrigger value="conversion">Conversion</TabsTrigger>
+              <TabsTrigger value="overview">{t.analytics.overview}</TabsTrigger>
+              <TabsTrigger value="engagement">{t.analytics.engagement}</TabsTrigger>
+              <TabsTrigger value="conversion">{t.analytics.conversion}</TabsTrigger>
             </TabsList>
           </CardHeader>
           <CardContent>
             <TabsContent value="overview" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-3">
                 {[
-                  { label: "Total Sessions", value: "52,341" },
-                  { label: "New Users", value: "12,453" },
-                  { label: "Returning Users", value: "39,888" },
+                  { label: t.analytics.totalSessions, value: "52,341" },
+                  { label: t.analytics.newUsers, value: "12,453" },
+                  { label: t.analytics.returningUsers, value: "39,888" },
                 ].map((stat, index) => (
                   <div
                     key={index}
@@ -180,9 +181,9 @@ export default function AnalyticsPage() {
             <TabsContent value="engagement" className="space-y-4">
               <div className="space-y-4">
                 {[
-                  { metric: "Avg. Session Duration", value: "3m 24s" },
-                  { metric: "Pages per Session", value: "4.2" },
-                  { metric: "Bounce Rate", value: "42.3%" },
+                  { metric: t.analytics.avgSessionDuration, value: "3m 24s" },
+                  { metric: t.analytics.pagesPerSession, value: "4.2" },
+                  { metric: t.analytics.bounceRate, value: "42.3%" },
                 ].map((item, index) => (
                   <div
                     key={index}
@@ -198,24 +199,20 @@ export default function AnalyticsPage() {
             <TabsContent value="conversion" className="space-y-4">
               <div className="space-y-4">
                 {[
-                  {
-                    goal: "Newsletter Signups",
-                    rate: "12.4%",
-                    completed: 523,
-                  },
-                  { goal: "Product Purchases", rate: "3.2%", completed: 145 },
-                  { goal: "Contact Form", rate: "8.7%", completed: 312 },
+                  { goal: t.analytics.newsletterSignups, rate: "12.4%", completed: 523 },
+                  { goal: t.analytics.productPurchases, rate: "3.2%", completed: 145 },
+                  { goal: t.analytics.contactForm, rate: "8.7%", completed: 312 },
                 ].map((goal, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">{goal.goal}</span>
                       <span className="text-sm text-muted-foreground">
-                        {goal.completed} conversions
+                        {goal.completed} {t.analytics.conversions}
                       </span>
                     </div>
                     <Progress value={parseFloat(goal.rate)} />
                     <p className="text-xs text-muted-foreground">
-                      Conversion rate: {goal.rate}
+                      {t.analytics.conversionRate}: {goal.rate}
                     </p>
                   </div>
                 ))}
@@ -227,4 +224,3 @@ export default function AnalyticsPage() {
     </div>
   );
 }
-

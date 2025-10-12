@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useLanguage } from "@/contexts/language-context";
 import {
   Bell,
   Check,
@@ -21,57 +22,58 @@ import {
 interface Notification {
   id: string;
   type: "info" | "success" | "warning" | "message";
-  title: string;
-  message: string;
+  titleKey: string;
+  messageKey: string;
   time: string;
   read: boolean;
   icon: React.ComponentType<{ className?: string }>;
 }
 
 export default function NotificationsPage() {
+  const { t } = useLanguage();
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: "1",
       type: "success",
-      title: "New order received",
-      message: "Order #12345 has been placed by John Doe",
-      time: "2 minutes ago",
+      titleKey: "newOrder",
+      messageKey: "newOrderDesc",
+      time: "2 دقیقه پیش",
       read: false,
       icon: ShoppingCart,
     },
     {
       id: "2",
       type: "info",
-      title: "New user registered",
-      message: "Jane Smith just created an account",
-      time: "15 minutes ago",
+      titleKey: "newUser",
+      messageKey: "newUserDesc",
+      time: "15 دقیقه پیش",
       read: false,
       icon: UserPlus,
     },
     {
       id: "3",
       type: "message",
-      title: "New message",
-      message: "You have a new message from support team",
-      time: "1 hour ago",
+      titleKey: "newMessage",
+      messageKey: "newMessageDesc",
+      time: "1 ساعت پیش",
       read: false,
       icon: MessageSquare,
     },
     {
       id: "4",
       type: "warning",
-      title: "Low stock alert",
-      message: "Product 'Premium Plan' is running low on stock",
-      time: "3 hours ago",
+      titleKey: "lowStock",
+      messageKey: "lowStockDesc",
+      time: "3 ساعت پیش",
       read: true,
       icon: AlertCircle,
     },
     {
       id: "5",
       type: "info",
-      title: "System update",
-      message: "System maintenance scheduled for tonight at 2 AM",
-      time: "5 hours ago",
+      titleKey: "systemUpdate",
+      messageKey: "systemUpdateDesc",
+      time: "5 ساعت پیش",
       read: true,
       icon: Bell,
     },
@@ -112,25 +114,29 @@ export default function NotificationsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Notifications</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t.notifications.title}</h1>
           <p className="text-muted-foreground">
-            {unreadCount} unread notification{unreadCount !== 1 ? "s" : ""}
+            {unreadCount} {t.notifications.unread}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={markAllAsRead}>
             <Check className="mr-2 h-4 w-4" />
-            Mark all as read
+            {t.notifications.markAllRead}
           </Button>
         </div>
       </div>
 
       <Tabs defaultValue="all">
         <TabsList>
-          <TabsTrigger value="all">All ({notifications.length})</TabsTrigger>
-          <TabsTrigger value="unread">Unread ({unreadCount})</TabsTrigger>
+          <TabsTrigger value="all">
+            {t.notifications.all} ({notifications.length})
+          </TabsTrigger>
+          <TabsTrigger value="unread">
+            {t.common.search} ({unreadCount})
+          </TabsTrigger>
           <TabsTrigger value="read">
-            Read ({notifications.length - unreadCount})
+            {t.notifications.read} ({notifications.length - unreadCount})
           </TabsTrigger>
         </TabsList>
 
@@ -139,7 +145,7 @@ export default function NotificationsPage() {
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Bell className="mb-4 h-12 w-12 text-muted-foreground" />
-                <p className="text-muted-foreground">No notifications yet</p>
+                <p className="text-muted-foreground">{t.notifications.noNotifications}</p>
               </CardContent>
             </Card>
           ) : (
@@ -159,16 +165,16 @@ export default function NotificationsPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className="font-semibold">
-                            {notification.title}
+                            {t.notifications[notification.titleKey as keyof typeof t.notifications]}
                           </h3>
                           {!notification.read && (
                             <Badge variant="default" className="text-xs">
-                              New
+                              {t.notifications.new}
                             </Badge>
                           )}
                         </div>
                         <p className="mt-1 text-sm text-muted-foreground">
-                          {notification.message}
+                          {t.notifications[notification.messageKey as keyof typeof t.notifications]}
                         </p>
                         <p className="mt-2 text-xs text-muted-foreground">
                           {notification.time}
@@ -205,7 +211,7 @@ export default function NotificationsPage() {
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <Check className="mb-4 h-12 w-12 text-green-600" />
-                <p className="text-muted-foreground">All caught up!</p>
+                <p className="text-muted-foreground">{t.notifications.allCaughtUp}</p>
               </CardContent>
             </Card>
           ) : (
@@ -224,14 +230,14 @@ export default function NotificationsPage() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
                             <h3 className="font-semibold">
-                              {notification.title}
+                              {t.notifications[notification.titleKey as keyof typeof t.notifications]}
                             </h3>
                             <Badge variant="default" className="text-xs">
-                              New
+                              {t.notifications.new}
                             </Badge>
                           </div>
                           <p className="mt-1 text-sm text-muted-foreground">
-                            {notification.message}
+                            {t.notifications[notification.messageKey as keyof typeof t.notifications]}
                           </p>
                           <p className="mt-2 text-xs text-muted-foreground">
                             {notification.time}
@@ -275,9 +281,11 @@ export default function NotificationsPage() {
                   <div className="flex-1">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-semibold">{notification.title}</h3>
+                        <h3 className="font-semibold">
+                          {t.notifications[notification.titleKey as keyof typeof t.notifications]}
+                        </h3>
                         <p className="mt-1 text-sm text-muted-foreground">
-                          {notification.message}
+                          {t.notifications[notification.messageKey as keyof typeof t.notifications]}
                         </p>
                         <p className="mt-2 text-xs text-muted-foreground">
                           {notification.time}
@@ -300,4 +308,3 @@ export default function NotificationsPage() {
     </div>
   );
 }
-

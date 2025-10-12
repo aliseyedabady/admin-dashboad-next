@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { mockAuth } from "@/lib/auth";
+import { useLanguage } from "@/contexts/language-context";
 import { LogIn } from "lucide-react";
 
 const loginSchema = yup.object().shape({
@@ -34,6 +35,7 @@ type LoginFormData = yup.InferType<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const {
     register,
     handleSubmit,
@@ -67,9 +69,9 @@ export default function LoginPage() {
             <LogIn className="h-6 w-6 text-primary-foreground" />
           </div>
         </div>
-        <CardTitle className="text-center text-2xl">Welcome back</CardTitle>
+        <CardTitle className="text-center text-2xl">{t.auth.login.title}</CardTitle>
         <CardDescription className="text-center">
-          Enter your credentials to access your account
+          {t.auth.login.subtitle}
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,7 +82,7 @@ export default function LoginPage() {
             </div>
           )}
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t.auth.login.email}</Label>
             <Input
               id="email"
               type="email"
@@ -92,11 +94,11 @@ export default function LoginPage() {
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t.auth.login.password}</Label>
             <Input
               id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder={t.auth.login.password}
               {...register("password")}
             />
             {errors.password && (
@@ -108,15 +110,15 @@ export default function LoginPage() {
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Signing in..." : "Sign in"}
+            {isSubmitting ? t.auth.login.signingIn : t.auth.login.signIn}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            {t.auth.login.noAccount}{" "}
             <Link
               href="/register"
               className="font-medium text-primary hover:underline"
             >
-              Register
+              {t.auth.login.register}
             </Link>
           </p>
         </CardFooter>

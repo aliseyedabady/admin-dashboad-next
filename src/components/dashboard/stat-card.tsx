@@ -1,6 +1,9 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowUp, ArrowDown, LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/language-context";
 
 interface StatCardProps {
   title: string;
@@ -11,6 +14,7 @@ interface StatCardProps {
 
 export function StatCard({ title, value, change, icon: Icon }: StatCardProps) {
   const isPositive = change >= 0;
+  const { t } = useLanguage();
 
   return (
     <Card>
@@ -34,7 +38,7 @@ export function StatCard({ title, value, change, icon: Icon }: StatCardProps) {
             )}
             {Math.abs(change)}%
           </span>{" "}
-          from last month
+          {t.dashboard.fromLastMonth}
         </p>
       </CardContent>
     </Card>
