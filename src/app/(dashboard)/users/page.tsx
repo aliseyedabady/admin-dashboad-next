@@ -23,11 +23,12 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { Pagination } from "@/components/ui/pagination";
+import { Search, ArrowUpDown } from "lucide-react";
 import { User } from "@/types";
 
 export default function UsersPage() {
-  const { t } = useLanguage();
+  const { t, dir } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState<keyof User>("name");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
@@ -312,53 +313,13 @@ export default function UsersPage() {
           </Table>
 
           {/* Pagination */}
-          <div className="mt-4 flex items-center justify-between">
-            <p className="text-muted-foreground text-sm">
-              {t.users.showing} {(currentPage - 1) * itemsPerPage + 1} {t.users.to}{" "}
-              {Math.min(
-                currentPage * itemsPerPage,
-                filteredAndSortedUsers.length
-              )}{" "}
-              {t.users.of} {filteredAndSortedUsers.length}
-            </p>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-                {t.users.previous}
-              </Button>
-              <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setCurrentPage(page)}
-                      className="h-8 w-8 p-0"
-                    >
-                      {page}
-                    </Button>
-                  )
-                )}
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  setCurrentPage((p) => Math.min(totalPages, p + 1))
-                }
-                disabled={currentPage === totalPages}
-              >
-                {t.users.next}
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={filteredAndSortedUsers.length}
+            itemsPerPage={itemsPerPage}
+          />
         </CardContent>
       </Card>
     </div>
