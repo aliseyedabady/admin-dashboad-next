@@ -50,6 +50,7 @@ interface DropdownMenuContentProps {
   open?: boolean;
   setOpen?: (open: boolean) => void;
   className?: string;
+  align?: "start" | "end" | "center";
 }
 
 const DropdownMenuContent = ({
@@ -57,6 +58,7 @@ const DropdownMenuContent = ({
   open,
   setOpen,
   className,
+  align = "center",
 }: DropdownMenuContentProps) => {
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -78,11 +80,18 @@ const DropdownMenuContent = ({
 
   if (!open) return null;
 
+  const alignmentClasses = {
+    start: "left-0 origin-top-left rtl:left-auto rtl:right-0 rtl:origin-top-right",
+    end: "right-0 origin-top-right rtl:right-auto rtl:left-0 rtl:origin-top-left",
+    center: "left-1/2 -translate-x-1/2 origin-top",
+  };
+
   return (
     <div
       ref={ref}
       className={cn(
-        "bg-popover text-popover-foreground absolute right-0 z-50 mt-2 w-56 origin-top-right rounded-md border p-1 shadow-lg",
+        "bg-popover text-popover-foreground absolute z-50 mt-2 w-56 rounded-md border p-1 shadow-lg",
+        alignmentClasses[align],
         className
       )}
     >
