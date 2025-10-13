@@ -14,9 +14,22 @@ import {
   TrendingUp,
   Bell,
   Boxes,
+  ChevronDown,
+  FileText,
+  PieChart,
+  TrendingDown,
+  type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/language-context";
+import { useState } from "react";
+
+interface NavItem {
+  name: string;
+  href?: string;
+  icon: LucideIcon;
+  children?: NavItem[];
+}
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -27,8 +40,17 @@ interface SidebarProps {
 export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
   const pathname = usePathname();
   const { t, dir } = useLanguage();
+  const [openMenus, setOpenMenus] = useState<string[]>([]);
 
-  const navigation = [
+  const toggleMenu = (name: string) => {
+    setOpenMenus((prev) =>
+      prev.includes(name)
+        ? prev.filter((item) => item !== name)
+        : [...prev, name]
+    );
+  };
+
+  const navigation: NavItem[] = [
     {
       name: t.nav.dashboard,
       href: "/dashboard",
@@ -51,8 +73,29 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
     },
     {
       name: t.nav.reports,
-      href: "/reports",
       icon: BarChart3,
+      children: [
+        {
+          name: dir === "rtl" ? "گزارش فروش" : "Sales Report",
+          href: "/reports/sales",
+          icon: TrendingUp,
+        },
+        {
+          name: dir === "rtl" ? "گزارش تحلیلی" : "Analytics Report",
+          href: "/reports/analytics",
+          icon: PieChart,
+        },
+        {
+          name: dir === "rtl" ? "گزارش عملکرد" : "Performance Report",
+          href: "/reports/performance",
+          icon: TrendingDown,
+        },
+        {
+          name: dir === "rtl" ? "گزارش‌های عمومی" : "General Reports",
+          href: "/reports",
+          icon: FileText,
+        },
+      ],
     },
     {
       name: t.nav.notifications,
@@ -76,6 +119,68 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
     },
   ];
 
+  const renderNavItem = (item: NavItem, depth = 0) => {
+    const hasChildren = item.children && item.children.length > 0;
+    const isOpen = openMenus.includes(item.name);
+    const isActive = pathname === item.href;
+    const isChildActive = hasChildren && item.children?.some(child => pathname === child.href);
+
+    if (hasChildren) {
+      return (
+        <div key={item.name}>
+          <button
+            onClick={() => toggleMenu(item.name)}
+            className={cn(
+              "flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+              dir === "rtl" ? "space-x-reverse" : "",
+              isChildActive
+                ? "bg-accent text-accent-foreground"
+                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            )}
+            title={isCollapsed ? item.name : undefined}
+          >
+            <div className={cn("flex items-center gap-3", dir === "rtl" ? "flex-row-reverse" : "")}>
+              <item.icon className="h-5 w-5 flex-shrink-0" />
+              {!isCollapsed && <span>{item.name}</span>}
+            </div>
+            {!isCollapsed && (
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 flex-shrink-0 transition-transform",
+                  isOpen && "rotate-180"
+                )}
+              />
+            )}
+          </button>
+          {!isCollapsed && isOpen && (
+            <div className={cn("mt-1 space-y-1", dir === "rtl" ? "mr-4" : "ml-4")}>
+              {item.children?.map((child) => renderNavItem(child, depth + 1))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <Link
+        key={item.name}
+        href={item.href!}
+        className={cn(
+          "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+          dir === "rtl" ? "flex-row-reverse" : "",
+          depth > 0 && "py-1.5",
+          isActive
+            ? "bg-primary text-primary-foreground"
+            : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+        )}
+        title={isCollapsed ? item.name : undefined}
+      >
+        <item.icon className="h-5 w-5 flex-shrink-0" />
+        {!isCollapsed && <span>{item.name}</span>}
+      </Link>
+    );
+  };
+
   return (
     <div
       className={cn(
@@ -86,7 +191,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
       {/* Logo */}
       <div className="flex h-16 items-center border-b px-4">
         {!isCollapsed && (
-          <Link href="/dashboard" className="flex items-center space-x-2">
+          <Link href="/dashboard" className={cn("flex items-center gap-2", dir === "rtl" ? "flex-row-reverse" : "")}>
             <div className="bg-primary flex h-8 w-8 items-center justify-center rounded-lg">
               <LayoutDashboard className="text-primary-foreground h-5 w-5" />
             </div>
@@ -106,25 +211,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
 
       {/* Navigation */}
       <nav className="flex-1 space-y-1 overflow-y-auto p-2">
-        {navigation.map((item) => {
-          const isActive = pathname === item.href;
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={cn(
-                "flex items-center space-x-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
-              )}
-              title={isCollapsed ? item.name : undefined}
-            >
-              <item.icon className="h-5 w-5 flex-shrink-0" />
-              {!isCollapsed && <span>{item.name}</span>}
-            </Link>
-          );
-        })}
+        {navigation.map((item) => renderNavItem(item))}
       </nav>
 
       {/* Collapse button */}

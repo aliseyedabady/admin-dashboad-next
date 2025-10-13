@@ -1,6 +1,15 @@
 "use client";
 
-import { Search, Moon, Sun, User, LogOut, Menu, Bell, Languages } from "lucide-react";
+import {
+  Search,
+  Moon,
+  Sun,
+  User,
+  LogOut,
+  Menu,
+  Bell,
+  Languages,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -50,7 +59,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   };
 
   return (
-    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40 border-b backdrop-blur">
+    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 items-center gap-4 px-4 md:px-6">
         {/* Mobile menu button */}
         <Button
@@ -65,7 +74,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
         {/* Search */}
         <div className="flex-1">
           <div className="relative max-w-md">
-            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
               placeholder={t.nav.search}
@@ -108,8 +117,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
             size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
-            <Sun className="h-5 w-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-            <Moon className="absolute h-5 w-5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+            <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+            <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
           </Button>
 
@@ -130,22 +139,22 @@ export function Navbar({ onMenuClick }: NavbarProps) {
             <DropdownMenuContent className="w-56" align="end">
               <DropdownMenuLabel>
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm leading-none font-medium">
+                  <p className="text-sm font-medium leading-none">
                     {user?.name || "User"}
                   </p>
-                  <p className="text-muted-foreground text-xs leading-none">
+                  <p className="text-xs leading-none text-muted-foreground">
                     {user?.email || "user@example.com"}
                   </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => router.push("/profile")}>
-                <User className="mr-2 h-4 w-4" />
+                <User className="mr-2 h-4 w-4 rtl:ml-2" />
                 {t.nav.profile}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
-                <LogOut className="mr-2 h-4 w-4" />
+                <LogOut className="mr-2 h-4 w-4 rtl:ml-2" />
                 {t.nav.logout}
               </DropdownMenuItem>
             </DropdownMenuContent>
